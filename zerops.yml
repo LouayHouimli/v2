@@ -1,0 +1,58 @@
+zerops:
+  # define hostname of your service
+  - setup: app
+    # ==== how to build your application ====
+    build:
+      # REQUIRED. Set the base technology for the build environment:
+      base: nodejs@latest
+
+      # OPTIONAL. Set the operating system for the build environment.
+      # os: ubuntu
+
+      # OPTIONAL. Customize the build environment by installing additional packages
+      # or tools to the base build environment.
+      # prepareCommands:
+      #   - apt-get something
+      #   - curl something else
+
+      # REQUIRED. Build your application
+      buildCommands:
+        - pnpm i
+        - pnpm build
+
+      # REQUIRED. Select which files / folders to deploy after
+      # the build has successfully finished
+      deployFiles:
+        - .output
+        - .vinxi
+        - package.json
+        - node_modules
+
+      # OPTIONAL. Which files / folders you want to cache for the next build.
+      # Next builds will be faster when the cache is used.
+      cache: node_modules
+
+    # ==== how to run your application ====
+    run:
+      # OPTIONAL. Sets the base technology for the runtime environment:
+      base: nodejs@latest
+
+      # OPTIONAL. Sets the internal port(s) your app listens on:
+      ports:
+        # port number
+        - port: 3000
+
+      # OPTIONAL. Customize the runtime Node.js environment by installing additional
+      # dependencies to the base Node.js runtime environment.
+      # prepareCommands:
+      #   - apt-get something
+      #   - curl something else
+
+      # OPTIONAL. Run one or more commands each time a new runtime container
+      # is started or restarted. These commands are triggered before
+      # your Node.js application is started.
+      # initCommands:
+      #  - rm -rf ./cache
+
+      # REQUIRED. Your Node.js application start command
+      start: pnpm start
