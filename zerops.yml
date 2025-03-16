@@ -29,6 +29,7 @@ zerops:
       deployFiles:
         - .output
         - .vinxi
+        - public
         - package.json
         - node_modules
 
