@@ -5,6 +5,8 @@ zerops:
     build:
       # REQUIRED. Set the base technology for the build environment:
       base: nodejs@latest
+      envVariables:
+        DATABASE_URL: ${db_connectionString}/${db_dbName}
 
       # OPTIONAL. Set the operating system for the build environment.
       # os: ubuntu
