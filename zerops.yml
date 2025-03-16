@@ -40,6 +40,8 @@ zerops:
     run:
       # OPTIONAL. Sets the base technology for the runtime environment:
       base: nodejs@latest
+      envVariables:
+        DATABASE_URL: ${db1_connectionString}/${db1_dbName}
 
       # OPTIONAL. Sets the internal port(s) your app listens on:
       ports:

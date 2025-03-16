@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "node -r dotenv/config .output/server/index.mjs",
+    "build": "drizzle-kit generate && drizzle-kit migrate && vinxi build",
+    "start": " node -r dotenv/config .output/server/index.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
     "db": "drizzle-kit",
