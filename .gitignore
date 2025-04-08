@@ -21,4 +21,6 @@ dist
 # docker-compose db
 db
 
-app.config.timestamp*
+app.config.timestamp_*
+
+
