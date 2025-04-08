@@ -16,6 +16,9 @@ export const auth = betterAuth({
       maxAge: 5 * 60, // 5 minutes
     },
   },
+  advanced: {
+    cookiePrefix: "louli.tech",
+  },
 
   // https://www.better-auth.com/docs/concepts/oauth
   socialProviders: {
