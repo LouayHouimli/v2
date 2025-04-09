@@ -1,8 +1,8 @@
 import { Link, createFileRoute, useRouter } from "@tanstack/react-router";
 import authClient from "~/lib/auth-client";
+import Image from "~/lib/components/Image";
 import ThemeToggle from "~/lib/components/ThemeToggle";
 import { Button } from "~/lib/components/ui/button";
-
 export const Route = createFileRoute("/")({
   component: Home,
   loader: ({ context }) => {
@@ -17,7 +17,7 @@ function Home() {
 
   return (
     <div className="flex flex-col gap-4 p-6">
-      <h1 className="text-4xl font-bold">TanStarter</h1>
+      <h1 className="text-4xl font-bold">Louli</h1>
       <div className="flex items-center gap-2">
         This is an unprotected page:
         <pre className="rounded-md border bg-card p-1 text-card-foreground">
@@ -60,7 +60,8 @@ function Home() {
       )}
 
       <ThemeToggle />
-      <img src={process.env.cdnUrl + "/favicon.png"} alt="logo" />
+
+      <Image fileName="favicon.png" alt="logo" className="w-10 h-10" />
 
       <a
         className="text-muted-foreground underline hover:text-foreground"
