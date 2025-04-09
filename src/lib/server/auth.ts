@@ -19,6 +19,9 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: "louli.tech",
   },
+  emailAndPassword: {
+    enabled: true,
+  },
 
   // https://www.better-auth.com/docs/concepts/oauth
   socialProviders: {

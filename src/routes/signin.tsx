@@ -1,5 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { type ComponentProps } from "react";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
+import { useState, type ComponentProps } from "react";
 import authClient from "~/lib/auth-client";
 import { Button } from "~/lib/components/ui/button";
 import { cn } from "~/lib/utils";
@@ -20,24 +20,10 @@ export const Route = createFileRoute("/signin")({
 function AuthPage() {
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-8 rounded-xl border bg-card p-10">
-        Logo here
+      <div className="flex flex-col items-center border rounded-xl gap-8 bg-card p-10">
         <div className="flex flex-col gap-2">
-          <SignInButton
-            provider="discord"
-            label="Discord"
-            className="bg-[#5865F2] hover:bg-[#5865F2]/80"
-          />
-          <SignInButton
-            provider="github"
-            label="GitHub"
-            className="bg-neutral-700 hover:bg-neutral-700/80"
-          />
-          <SignInButton
-            provider="google"
-            label="Google"
-            className="bg-[#DB4437] hover:bg-[#DB4437]/80"
-          />
+          <SignInWithCredentials />
+          <SignInButton provider="google" label="Google" />
         </div>
       </div>
     </div>
@@ -61,10 +47,56 @@ function SignInButton({ provider, label, className, ...props }: SignInButtonProp
       type="button"
       variant="outline"
       size="lg"
-      className={cn("text-white hover:text-white", className)}
+      className={cn("text-black hover:text-black cursor-pointer", className)}
       {...props}
     >
       Sign in with {label}
     </Button>
+  );
+}
+
+function SignInWithCredentials() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+  return (
+    <div className="flex flex-col gap-2">
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <Button
+        onClick={() =>
+          authClient.signUp.email({
+            name: username,
+            email,
+            password,
+            fetchOptions: {
+              onSuccess: () => {
+                router.navigate({ to: REDIRECT_URL });
+              },
+            },
+          })
+        }
+        type="submit"
+      >
+        Create Account
+      </Button>
+    </div>
   );
 }
