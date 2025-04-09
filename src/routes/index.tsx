@@ -60,7 +60,7 @@ function Home() {
       )}
 
       <ThemeToggle />
-      <img src="/favicon.png" alt="logo" />
+      <img src={process.env.cdnUrl + "/favicon.png"} alt="logo" />
 
       <a
         className="text-muted-foreground underline hover:text-foreground"
