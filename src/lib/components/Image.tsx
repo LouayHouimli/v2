@@ -10,7 +10,7 @@ const Image = ({
   const cdnUrl =
     process.env.NODE_ENV === "development"
       ? import.meta.env.VITE_CDN_URL
-      : process.env.VITE_CDN_URL;
+      : process.env.VITE_CDN_URL!;
   return <img src={cdnUrl + "/" + fileName} alt={alt} className={className} />;
 };
 
