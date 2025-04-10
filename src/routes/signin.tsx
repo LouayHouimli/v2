@@ -4,7 +4,7 @@ import authClient from "~/lib/auth-client";
 import { Button } from "~/lib/components/ui/button";
 import { cn } from "~/lib/utils";
 
-const REDIRECT_URL = "/dashboard";
+const REDIRECT_URL = "/";
 
 export const Route = createFileRoute("/signin")({
   component: AuthPage,
@@ -89,6 +89,7 @@ function SignInWithCredentials() {
             fetchOptions: {
               onSuccess: () => {
                 router.navigate({ to: REDIRECT_URL });
+                router.invalidate();
               },
             },
           })

@@ -42,7 +42,7 @@ export const Route = createRootRouteWithContext<{
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "v2",
+        title: "Louli Tech",
       },
       {
         icon: [{ url: "/favicon.ico" }, { url: "/favicon.svg", type: "image/svg+xml" }],
@@ -68,7 +68,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="mx-5">
         <ScriptOnce>
           {`document.documentElement.classList.toggle(
             'dark',
