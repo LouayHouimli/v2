@@ -1,4 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
 import { useState, type ComponentProps } from "react";
 import authClient from "~/lib/auth-client";
 import { Button } from "~/lib/components/ui/button";
@@ -8,12 +10,32 @@ const REDIRECT_URL = "/";
 
 export const Route = createFileRoute("/signin")({
   component: AuthPage,
-  beforeLoad: async ({ context }) => {
+  validateSearch: (search) => ({
+    returnTo: search?.returnTo
+      ? decodeURIComponent(search.returnTo as string)
+      : undefined,
+  }),
+  beforeLoad: async ({ context, search }) => {
     if (context.user) {
       throw redirect({
         to: REDIRECT_URL,
+        search: {
+          returnTo: search?.returnTo
+            ? decodeURIComponent(search.returnTo as string)
+            : undefined,
+        },
       });
     }
+    return {
+      returnTo: search?.returnTo
+        ? decodeURIComponent(search.returnTo as string)
+        : undefined,
+    };
+  },
+  loader: async ({ context }) => {
+    return {
+      returnTo: context.returnTo as string | undefined,
+    };
   },
 });
 
@@ -36,12 +58,13 @@ interface SignInButtonProps extends ComponentProps<typeof Button> {
 }
 
 function SignInButton({ provider, label, className, ...props }: SignInButtonProps) {
+  const { returnTo } = Route.useLoaderData();
   return (
     <Button
       onClick={() =>
         authClient.signIn.social({
           provider,
-          callbackURL: REDIRECT_URL,
+          callbackURL: returnTo as string,
         })
       }
       type="button"
@@ -60,14 +83,12 @@ function SignInWithCredentials() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
+  const { returnTo } = Route.useLoaderData();
+
   return (
     <div className="flex flex-col gap-2">
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
       <input
         type="email"
         placeholder="Email"
@@ -82,21 +103,31 @@ function SignInWithCredentials() {
       />
       <Button
         onClick={() =>
-          authClient.signUp.email({
-            name: username,
+          authClient.signIn.email({
             email,
             password,
+
             fetchOptions: {
-              onSuccess: () => {
-                router.navigate({ to: REDIRECT_URL });
-                router.invalidate();
+              onSuccess: (ctx) => {
+                if (ctx.data?.user) {
+                  queryClient.invalidateQueries({ queryKey: ["user"] });
+                }
+                setLoading(false);
+                router.navigate({ to: returnTo as string });
+              },
+              onRequest: () => {
+                setLoading(true);
+              },
+              onError(context) {
+                setLoading(false);
+                alert(context.error.message);
               },
             },
           })
         }
         type="submit"
       >
-        Create Account
+        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
       </Button>
     </div>
   );

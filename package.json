@@ -31,6 +31,7 @@
     "drizzle-orm": "^0.40.0",
     "framer-motion": "^12.6.3",
     "lucide-react": "^0.479.0",
+    "nuqs": "^2.4.1",
     "postgres": "^3.4.5",
     "posthog-js": "^1.231.0",
     "react": "^19.0.0",

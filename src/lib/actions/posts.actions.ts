@@ -17,8 +17,43 @@ export const createPost = createServerFn({ method: "POST" })
     return `Hello, ${ctx.data.title}! You are ${ctx.data.content}.`;
   });
 
+const Posts = [
+  {
+    id: 1,
+    title: "Post 1",
+    content: "Content 1",
+    author: "John Doe",
+    category: "fantasy",
+    releaseDate: "2024",
+  },
+  {
+    id: 2,
+    title: "Post 2",
+    content: "Content 2",
+    author: "Jane Doe",
+    category: "horror",
+    releaseDate: "2025",
+  },
+  {
+    id: 3,
+    title: "Post 3",
+    content: "Content 3",
+    author: "John Doe",
+    category: "fantasy",
+    releaseDate: "2025",
+  },
+  {
+    id: 4,
+    title: "Post 4",
+    content: "Content 4",
+    author: "Jane Doe",
+    category: "horror",
+    releaseDate: "2024",
+  },
+];
+
 export const getPosts = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async () => {
-    return `Hello, test from getPosts.`;
+    return Posts;
   });

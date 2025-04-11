@@ -59,6 +59,9 @@ importers:
       lucide-react:
         specifier: ^0.479.0
         version: 0.479.0(react@19.0.0)
+      nuqs:
+        specifier: ^2.4.1
+        version: 2.4.1(react@19.0.0)
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
@@ -3351,6 +3354,9 @@ packages:
     resolution: {integrity: sha512-umcy022ILvb5/3Djuu8LWeqUa8D68JaBzlttKeMWen48SjabqS3iY5w/vzeMzMUNhLDifyhbOwKDSznB1vvrwg==}
     engines: {node: '>= 18'}
 
+  mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+
   mkdirp@3.0.1:
     resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
     engines: {node: '>=10'}
@@ -3434,6 +3440,24 @@ packages:
   npm-run-path@5.3.0:
     resolution: {integrity: sha512-ppwTtiJZq0O/ai0z7yfudtBpWIoxM8yE6nHi1X47eFR2EWORqfbu6CnPlNsjeN683eT0qG6H/Pyf9fCcvjnnnQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  nuqs@2.4.1:
+    resolution: {integrity: sha512-u6sngTspqDe3jWHtcmqHQg3dl35niizCZAsm5gy7PBlgG2rwl71Dp2QUv5hwBaWKI9qz0wqILZY86TsRxq66SQ==}
+    peerDependencies:
+      '@remix-run/react': '>=2'
+      next: '>=14.2.0'
+      react: '>=18.2.0 || ^19.0.0-0'
+      react-router: ^6 || ^7
+      react-router-dom: ^6 || ^7
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      next:
+        optional: true
+      react-router:
+        optional: true
+      react-router-dom:
+        optional: true
 
   nypm@0.6.0:
     resolution: {integrity: sha512-mn8wBFV9G9+UFHIrq+pZ2r2zL4aPau/by3kJb3cM7+5tQHMt6HGQB8FDIeKFYp8o0D2pnH6nVsO88N4AmUxIWg==}
@@ -7746,6 +7770,8 @@ snapshots:
       minipass: 7.1.2
       rimraf: 5.0.10
 
+  mitt@3.0.1: {}
+
   mkdirp@3.0.1: {}
 
   mlly@1.7.4:
@@ -7900,6 +7926,11 @@ snapshots:
   npm-run-path@5.3.0:
     dependencies:
       path-key: 4.0.0
+
+  nuqs@2.4.1(react@19.0.0):
+    dependencies:
+      mitt: 3.0.1
+      react: 19.0.0
 
   nypm@0.6.0:
     dependencies:

@@ -1,5 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { NuqsAdapter } from "nuqs/adapters/react";
+
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -11,6 +13,8 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
 
+import { User } from "better-auth";
+import Navbar from "~/lib/components/Navbar";
 import { auth } from "~/lib/server/auth";
 import appCss from "~/lib/styles/app.css?url";
 
@@ -51,12 +55,22 @@ export const Route = createRootRouteWithContext<{
     links: [{ rel: "stylesheet", href: appCss }],
   }),
   component: RootComponent,
+  loader: async ({ context }) => {
+    return {
+      user: context.user,
+    };
+  },
 });
 
 function RootComponent() {
+  const { user } = Route.useLoaderData();
+
   return (
     <RootDocument>
-      <Outlet />
+      <NuqsAdapter>
+        <Navbar user={user as User} />
+        <Outlet />
+      </NuqsAdapter>
     </RootDocument>
   );
 }

@@ -19,8 +19,8 @@ const Navbar = ({ user }: { user: User }) => {
       href: "/",
     },
     {
-      label: "About",
-      href: "/about",
+      label: "Posts",
+      href: "/posts",
     },
     {
       label: "Contact",
@@ -34,7 +34,13 @@ const Navbar = ({ user }: { user: User }) => {
         <ul className="flex gap-4 space-x-7  items-center">
           {navItems.map((item) => (
             <li key={item.href} className="text-lg font-bold ">
-              <Link to={item.href}>{item.label}</Link>
+              {item.href === "/posts" ? (
+                <Link to={item.href} search={{ category: "all", releaseDate: "all" }}>
+                  {item.label}
+                </Link>
+              ) : (
+                <Link to={item.href}>{item.label}</Link>
+              )}
             </li>
           ))}
           {user ? (
@@ -65,7 +71,9 @@ const Navbar = ({ user }: { user: User }) => {
             </div>
           ) : (
             <Button variant="default" size="sm">
-              <Link to="/signin">Sign in</Link>
+              <Link to="/signin" search={{ returnTo: undefined }}>
+                Sign in
+              </Link>
             </Button>
           )}
         </ul>
