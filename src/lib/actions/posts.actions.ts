@@ -2,21 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "../middleware/auth-guard";
 
-const postSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }),
-  content: z.string().min(1, { message: "Content is required" }),
-});
-type Post = z.infer<typeof postSchema>;
-
-export const createPost = createServerFn({ method: "POST" })
-  .middleware([authMiddleware])
-  .validator((data: Post) => {
-    return postSchema.parse(data);
-  })
-  .handler(async (ctx) => {
-    return `Hello, ${ctx.data.title}! You are ${ctx.data.content}.`;
-  });
-
 const Posts = [
   {
     id: 1,
@@ -52,8 +37,36 @@ const Posts = [
   },
 ];
 
+const postSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  content: z.string().min(1, { message: "Content is required" }),
+  category: z.enum(["fantasy", "horror"]),
+  releaseDate: z.enum(["2024", "2025"]),
+  author: z.string().min(1, { message: "Author is required" }),
+});
+type Post = z.infer<typeof postSchema>;
+
 export const getPosts = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async () => {
+    return Posts;
+  });
+
+export const createPost = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator((data: Post) => {
+    console.log(data);
+    return postSchema.parse(data);
+  })
+  .handler(async (ctx) => {
+    Posts.push({
+      id: Posts.length + 1,
+      title: ctx.data?.title,
+      content: ctx.data?.content,
+      author: ctx.data?.author,
+      category: ctx.data?.category,
+      releaseDate: ctx.data?.releaseDate,
+    });
+
     return Posts;
   });

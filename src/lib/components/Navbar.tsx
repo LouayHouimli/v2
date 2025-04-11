@@ -22,10 +22,6 @@ const Navbar = ({ user }: { user: User }) => {
       label: "Posts",
       href: "/posts",
     },
-    {
-      label: "Contact",
-      href: "/contact",
-    },
   ];
   return (
     <div className="flex justify-between items-center p-4 ">

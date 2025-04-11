@@ -11,25 +11,19 @@ const REDIRECT_URL = "/";
 export const Route = createFileRoute("/signin")({
   component: AuthPage,
   validateSearch: (search) => ({
-    returnTo: search?.returnTo
-      ? decodeURIComponent(search.returnTo as string)
-      : undefined,
+    returnTo: search?.returnTo as string | undefined,
   }),
   beforeLoad: async ({ context, search }) => {
     if (context.user) {
       throw redirect({
         to: REDIRECT_URL,
         search: {
-          returnTo: search?.returnTo
-            ? decodeURIComponent(search.returnTo as string)
-            : undefined,
+          returnTo: search?.returnTo,
         },
       });
     }
     return {
-      returnTo: search?.returnTo
-        ? decodeURIComponent(search.returnTo as string)
-        : undefined,
+      returnTo: search?.returnTo,
     };
   },
   loader: async ({ context }) => {
@@ -119,8 +113,8 @@ function SignInWithCredentials() {
                 setLoading(true);
               },
               onError(context) {
-                setLoading(false);
                 alert(context.error.message);
+                setLoading(false);
               },
             },
           })
