@@ -46,11 +46,10 @@ const postSchema = z.object({
 });
 type Post = z.infer<typeof postSchema>;
 
-export const getPosts = createServerFn({ method: "GET" })
-  .middleware([authMiddleware])
-  .handler(async () => {
-    return Posts;
-  });
+export const getPosts = createServerFn({ method: "GET" }).handler(async () => {
+  console.log("hitten get posts");
+  return Posts;
+});
 
 export const createPost = createServerFn({ method: "POST" })
   .middleware([authMiddleware])

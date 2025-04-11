@@ -21,8 +21,8 @@ export const Route = createFileRoute("/posts/new")({
 function NewPostComponent() {
   const { category, releaseDate } = Route.useSearch();
   const [categoryState, setCategory] = useQueryState(
-    "category",
-    parseAsString.withDefault(category ?? "fantasy"),
+    "",
+    parseAsString.withDefault(category || "fantasy"),
   );
   const [titleState, setTitle] = useQueryState("title", {
     defaultValue: "",
@@ -31,7 +31,7 @@ function NewPostComponent() {
     defaultValue: "",
   });
   const [releaseDateState, setReleaseDate] = useQueryState("releaseDate", {
-    defaultValue: "2024",
+    defaultValue: releaseDate || "",
   });
   const queryClient = useQueryClient();
   const { user } = Route.useLoaderData();
@@ -99,10 +99,11 @@ function NewPostComponent() {
           </label>
           <select
             id="releaseDate"
-            value={releaseDate}
+            value={releaseDateState}
             onChange={(e) => setReleaseDate(e.target.value as "2024" | "2025")}
             className="w-full px-3 py-2 border rounded-md"
           >
+            <option value="">Select Release Date</option>
             <option value="2024">2024</option>
             <option value="2025">2025</option>
           </select>
