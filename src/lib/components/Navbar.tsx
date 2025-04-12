@@ -23,8 +23,6 @@ const Navbar = ({ user }: { user: User }) => {
     parseAsInteger.withDefault(0),
   );
 
-  console.log(category, releaseDate);
-
   const navItems = [
     {
       label: "Home",
