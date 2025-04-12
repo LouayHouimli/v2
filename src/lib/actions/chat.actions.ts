@@ -13,7 +13,7 @@ export const useChatMutate = () => {
       const apiKey =
         process.env.NODE_ENV === "development"
           ? import.meta.env.VITE_GOOGLE_GENERATIVE_AI_API_KEY
-          : process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+          : process.env.VITE_GOOGLE_GENERATIVE_AI_API_KEY;
 
       if (!apiKey) {
         throw new Error("No API key found");
