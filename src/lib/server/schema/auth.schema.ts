@@ -54,6 +54,9 @@ export const posts = pgTable("posts", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
   content: text("content").notNull(),
+  category: text("category").notNull(),
+  releaseDate: text("release_date").notNull(),
+  author: text("author").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

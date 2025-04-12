@@ -25,13 +25,18 @@ const Navbar = ({ user }: { user: User }) => {
   ];
   return (
     <div className="flex justify-between items-center p-4 ">
-      <Image fileName="favicon.png" alt="logo" className="w-10 h-10" />
+      <Link to="/">
+        <Image fileName="favicon.png" alt="logo" className="w-10 h-10 cursor-pointer" />
+      </Link>
       <nav className="flex justify-between items-center p-4 gap-4  ">
         <ul className="flex gap-4 space-x-7  items-center">
           {navItems.map((item) => (
             <li key={item.href} className="text-lg font-bold ">
               {item.href === "/posts" ? (
-                <Link to={item.href} search={{ category: "all", releaseDate: "all" }}>
+                <Link
+                  to={item.href}
+                  search={{ category: undefined, releaseDate: undefined }}
+                >
                   {item.label}
                 </Link>
               ) : (

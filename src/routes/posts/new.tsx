@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { parseAsString, useQueryState } from "nuqs";
+import { toast } from "sonner";
 import { createPost } from "~/lib/actions/posts.actions";
 import { Button } from "~/lib/components/ui/button";
 
@@ -35,10 +36,10 @@ function NewPostComponent() {
   });
   const queryClient = useQueryClient();
   const { user } = Route.useLoaderData();
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createPost({
+    const post = await createPost({
       data: {
         title: titleState,
         content: contentState,
@@ -47,7 +48,19 @@ function NewPostComponent() {
         releaseDate: releaseDateState as "2024" | "2025",
       },
     });
-    queryClient.invalidateQueries({ queryKey: ["posts"] });
+    if (post.success) {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success(post.message);
+      router.navigate({
+        to: "/posts",
+        search: {
+          category: "all",
+          releaseDate: "all",
+        },
+      });
+    } else {
+      toast.error(post.message);
+    }
   };
 
   return (

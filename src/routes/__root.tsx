@@ -15,6 +15,7 @@ import { getWebRequest } from "@tanstack/react-start/server";
 
 import { User } from "better-auth";
 import Navbar from "~/lib/components/Navbar";
+import { Toaster } from "~/lib/components/ui/sonner";
 import { auth } from "~/lib/server/auth";
 import appCss from "~/lib/styles/app.css?url";
 
@@ -70,6 +71,7 @@ function RootComponent() {
       <NuqsAdapter>
         <Navbar user={user as User} />
         <Outlet />
+        <Toaster />
       </NuqsAdapter>
     </RootDocument>
   );

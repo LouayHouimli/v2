@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Loader2, Plus } from "lucide-react";
-import { useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { getPosts } from "~/lib/actions/posts.actions";
 import { Button } from "~/lib/components/ui/button";
 
@@ -19,8 +19,14 @@ export const Route = createFileRoute("/posts/")({
 function RouteComponent() {
   const { category, releaseDate } = Route.useSearch();
 
-  const [categoryState, setCategory] = useQueryState("category");
-  const [releaseDateState, setReleaseDate] = useQueryState("releaseDate");
+  const [categoryState, setCategory] = useQueryState(
+    "category",
+    parseAsString.withDefault("all"),
+  );
+  const [releaseDateState, setReleaseDate] = useQueryState(
+    "releaseDate",
+    parseAsString.withDefault("all"),
+  );
   const { data: posts, isFetching } = useQuery({
     queryKey: ["posts"],
     queryFn: () => getPosts(),
@@ -90,7 +96,14 @@ function RouteComponent() {
           {filteredPosts.map((post) => (
             <div
               key={post.id}
-              className="border rounded-lg p-6 hover:shadow-lg transition-shadow"
+              className="border rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() =>
+                router.navigate({
+                  to: "/posts/$postId",
+                  params: { postId: post.id },
+                  search: { category: undefined, releaseDate: undefined },
+                })
+              }
             >
               <h2 className="text-xl font-semibold mb-2">
                 {post.title} By {post.author}

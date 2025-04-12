@@ -1,6 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { authMiddleware } from "../middleware/auth-guard";
+import { db } from "../server/db";
+import { posts } from "../server/schema/auth.schema";
 
 const Posts = [
   {
@@ -47,25 +50,56 @@ const postSchema = z.object({
 type Post = z.infer<typeof postSchema>;
 
 export const getPosts = createServerFn({ method: "GET" }).handler(async () => {
-  console.log("hitten get posts");
-  return Posts;
+  const posts = await db.query.posts.findMany();
+  return posts;
 });
+
+export const getPost = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .validator((data: string) => {
+    return z.string().min(1, { message: "Post ID is required" }).parse(data);
+  })
+  .handler(async (ctx) => {
+    const post = await db.query.posts.findFirst({
+      where: eq(posts.id, ctx.data),
+    });
+    return post;
+  });
 
 export const createPost = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator((data: Post) => {
-    console.log(data);
     return postSchema.parse(data);
   })
   .handler(async (ctx) => {
-    Posts.push({
-      id: Posts.length + 1,
-      title: ctx.data?.title,
-      content: ctx.data?.content,
-      author: ctx.data?.author,
-      category: ctx.data?.category,
-      releaseDate: ctx.data?.releaseDate,
-    });
+    try {
+      const post = await db
+        .insert(posts)
+        .values({
+          id: crypto.randomUUID(),
+          title: ctx.data?.title,
+          content: ctx.data?.content,
+          category: ctx.data?.category,
+          releaseDate: ctx.data?.releaseDate,
+          author: ctx.data?.author,
+        })
+        .returning();
 
-    return Posts;
+      if (!post) {
+        return {
+          success: false,
+          message: "Failed to create post",
+        };
+      } else {
+        return {
+          success: true,
+          message: "Post created successfully",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Failed to create post",
+      };
+    }
   });
