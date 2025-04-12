@@ -7,22 +7,19 @@ interface Message {
   content: string;
 }
 
+const getApiKey = () => {
+  const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GOOGLE_GENERATIVE_AI_API_KEY is not set in environment variables");
+  }
+  return apiKey;
+};
+
 export const useChatMutate = () => {
   return useMutation({
     mutationFn: async (messages: Message[]) => {
-      const apiKey =
-        process.env.NODE_ENV === "development"
-          ? import.meta.env.VITE_GOOGLE_GENERATIVE_AI_API_KEY
-          : process.env.VITE_GOOGLE_GENERATIVE_AI_API_KEY;
-
-      if (!apiKey) {
-        throw new Error("No API key found");
-      } else {
-        console.log("API key found", apiKey);
-      }
-
       const google = createGoogleGenerativeAI({
-        apiKey,
+        apiKey: getApiKey(),
       });
       const { textStream } = streamText({
         model: google("gemini-1.5-flash"),
