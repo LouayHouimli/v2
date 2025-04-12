@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { User } from "better-auth";
+import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import authClient from "../auth-client";
 import Image from "./Image";
 import { Button } from "./ui/button";
@@ -13,6 +14,17 @@ const Navbar = ({ user }: { user: User }) => {
     .map((name) => name[0])
     .join("");
 
+  const [category, setCategory] = useQueryState(
+    "category",
+    parseAsString.withDefault("all"),
+  );
+  const [releaseDate, setReleaseDate] = useQueryState(
+    "releaseDate",
+    parseAsInteger.withDefault(0),
+  );
+
+  console.log(category, releaseDate);
+
   const navItems = [
     {
       label: "Home",
@@ -21,6 +33,10 @@ const Navbar = ({ user }: { user: User }) => {
     {
       label: "Posts",
       href: "/posts",
+    },
+    {
+      label: "Chat",
+      href: "/chat",
     },
   ];
   return (
@@ -35,7 +51,10 @@ const Navbar = ({ user }: { user: User }) => {
               {item.href === "/posts" ? (
                 <Link
                   to={item.href}
-                  search={{ category: undefined, releaseDate: undefined }}
+                  search={{
+                    category: undefined,
+                    releaseDate: undefined,
+                  }}
                 >
                   {item.label}
                 </Link>
@@ -62,6 +81,7 @@ const Navbar = ({ user }: { user: User }) => {
                   onClick={async () => {
                     await authClient.signOut();
                     await queryClient.invalidateQueries({ queryKey: ["user"] });
+                    await queryClient.invalidateQueries({ queryKey: ["posts"] });
                     await router.invalidate();
                   }}
                   className="w-10 h-10 rounded-full cursor-pointer bg-gray-300 flex items-center justify-center text-2xl font-bold"

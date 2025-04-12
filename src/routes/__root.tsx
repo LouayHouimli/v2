@@ -56,6 +56,7 @@ export const Route = createRootRouteWithContext<{
     links: [{ rel: "stylesheet", href: appCss }],
   }),
   component: RootComponent,
+
   loader: async ({ context }) => {
     return {
       user: context.user,
@@ -65,7 +66,6 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   const { user } = Route.useLoaderData();
-
   return (
     <RootDocument>
       <NuqsAdapter>
